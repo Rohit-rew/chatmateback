@@ -1,17 +1,18 @@
-const express = require("express");
+const express  = require("express");
 const app = express();
 
-// types
-import { Request, Response } from "express";
+//bodyparser 
+const bodyParser = require("body-parser")
+app.use(bodyParser());
 
 //env config
 require("dotenv").config();
 
-// home route for testing only
-app.get("/", (req: Request, res: Response) => {
-  res.send("hello");
-});
+// routes
+const authRoute = require("./routes/auth") // login and register
+app.use(authRoute)
 
+// server starting
 const port = process.env.PORT;
 app.listen(port, console.log(`server started on port ${port}`));
  
