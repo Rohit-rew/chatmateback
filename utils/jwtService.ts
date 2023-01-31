@@ -7,7 +7,7 @@ interface jwtDataSanitized {
     email : string,
     name : string,
 }
-
+  
 interface jwtdataUnsanitized extends jwtDataSanitized {
     password : string
 }
@@ -24,6 +24,20 @@ export class JwtService {
         const sanitizeduserData = { name : userData.name, email : userData.email , id : userData.id}
         return sanitizeduserData
     }  
+
+    async validateToken (token : string) {
+        return await jwt.verify(token , (secret as string) , {algorithms : ["HS256"] })
+    }
+
+    async decodeJwt (token : string){
+        if(await this.validateToken(token)){
+            const userData =  jwt.decode(token )
+            const user = this.userDataSanitizer((userData as jwtdataUnsanitized))
+            return user
+        }else{
+            throw new Error("invalid JWT token")
+        }
+    }
 
 } 
 

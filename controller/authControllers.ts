@@ -42,7 +42,7 @@ export const signUp = async (
   let { name, email, password } = req.body;
 
   try {
-    const existingUser = await users.getUser(email);
+    const existingUser = await users.getUser(email); // checkif user exists
     if (existingUser) return next(new Error("Email already exists")); // if user already exists throw error
     password = await bcryptService.hashPassword(password) // if not then hash the password
     const newUser = users.createUser({ name, email, password }); // after hash create the user
