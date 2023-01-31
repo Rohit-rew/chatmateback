@@ -12,6 +12,14 @@ require("dotenv").config();
 const authRoute = require("./routes/auth") // login and register
 app.use(authRoute)
 
+
+//error handler
+const {errorCatcher , routeNotFoundError} = require("./errors/errorHandler")
+
+app.use(routeNotFoundError)
+app.use(errorCatcher)
+
+
 // server starting
 const port = process.env.PORT;
 app.listen(port, console.log(`server started on port ${port}`));

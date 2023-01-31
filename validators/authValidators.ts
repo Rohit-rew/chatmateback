@@ -42,7 +42,8 @@ export const validateuserSignUp = [
     .not()
     .isEmpty()
     .custom((value, { req }) => {
-      if (value != req.bdoy.password) {
+      if (value != req.body.password) {
+        console.log(value)
         throw new Error("Passwords do not match");
       }
       return true;
@@ -57,7 +58,7 @@ export const loginValidation = (
   const errors = validationResult(req).array();
 
   if (errors.length > 0) {
-    res.status(400).json({ success: false, errors });
+   return res.status(400).json({ success: false, errors });
   }
   return next();
 };
@@ -70,7 +71,7 @@ export const userSignUpvalidation = (
   const errors = validationResult(req).array();
 
   if (errors.length > 0) {
-    res.status(400).json({ success: false, errors });
+    return res.status(400).json({ success: false, errors });
   }
   return next();
 };

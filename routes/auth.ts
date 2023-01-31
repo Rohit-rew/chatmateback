@@ -1,17 +1,22 @@
-const experss = require("express")
-const Router = experss.Router()
+const experss = require("express");
+const Router = experss.Router();
 
 // types
-import { Request, Response } from "express"
+import { Request, Response } from "express";
 
 // controllers
-import { login , signUp } from "../controller/authControllers"
+import { login, signUp } from "../controller/authControllers";
 
 //validators
-import { validateUserLogin , loginValidation } from "../validators/authValidators"
+import {
+  validateUserLogin,
+  loginValidation,
+  userSignUpvalidation,
+  validateuserSignUp,
+} from "../validators/authValidators";
 
-Router.post("/login" , validateUserLogin, loginValidation , login)
+Router.post("/login", validateUserLogin, loginValidation, login);
 
-Router.post("/signup"  ,  signUp)
+Router.post("/signup", validateuserSignUp, userSignUpvalidation , signUp);
 
-module.exports = Router
+module.exports = Router;
