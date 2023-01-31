@@ -18,18 +18,20 @@ export const login = async (req: Request, res: Response , next : NextFunction) =
   const { email, password } = req.body;
 
   try {
-    const existingUser = await users.getUser(email)
-    if(!existingUser) return next(new Error("Invalid credentials"));
-    const isValidPass = bcryptService.comparePassword(password , existingUser.password)
-    if(!isValidPass) return next(new Error("Invalid credentials"));
-    const token = await jwtService.createToken(existingUser)
-    res.status(200).send({ success: true,tokenType : 'Bearer' , token});
+    const existingUser = await users.getUser(email) // check if user exists
+    if(!existingUser) return next(new Error("Invalid credentials")); // if not throw error
+    const isValidPass = bcryptService.comparePassword(password , existingUser.password)// if yes then compare password
+    if(!isValidPass) return next(new Error("Invalid credentials"));// if invalid pass then throw error
+    const sanitedUserData = jwtService.userDataSanitizer(existingUser) // sanitize the data (remove password)
+    const token = await jwtService.createToken(sanitedUserData) // if valid pass then generate token
+    res.status(200).send({ success: true,tokenType : 'Bearer' , token}); //send token to client
   } catch (error : any) {
     console.log(error)
     res.status(400).send({ success: false, msg: error.message });
   }
 
 };
+
 
 //registering new user
 export const signUp = async (
