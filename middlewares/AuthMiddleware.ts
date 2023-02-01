@@ -3,7 +3,13 @@ import { JwtService } from "../utils/jwtService";
 
 const jwtService = new JwtService()
 
-export const authMiddleware = async (req:Request,res : Response , next : NextFunction)=>{
+
+// index signature 
+interface Req extends Request {
+    [key: string]: any;
+}
+
+export const authMiddleware = async (req:Req,res : Response , next : NextFunction)=>{
     const token = req.headers.authorization
     if(! token) next(new Error("Auth token not attached"))
 
@@ -11,7 +17,8 @@ export const authMiddleware = async (req:Request,res : Response , next : NextFun
         try {
             const jwt = token.split(" ")[1]
             const user = await jwtService.decodeJwt(jwt)
-            // req.currentUser = user
+            // validate the user with the database record
+            req.currentUser = user
             next()
         } catch (error) {
             res.status(404).send({success : false , message : "invalid token please log in again"})

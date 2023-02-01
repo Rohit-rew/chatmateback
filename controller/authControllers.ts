@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 //prisma db
-import { Users } from "../prisma/database";
-const users = new Users();
+import { UsersRepo } from "../prisma/usersDb";
+const usersRepo = new UsersRepo();
 
 // bcrypt service
 import { BcryptService } from "../utils/bcrypt";
@@ -18,7 +18,7 @@ export const login = async (req: Request, res: Response , next : NextFunction) =
   const { email, password } = req.body;
 
   try {
-    const existingUser = await users.getUser(email) // check if user exists
+    const existingUser = await usersRepo.getUser(email) // check if user exists
     if(!existingUser) return next(new Error("Invalid credentials")); // if not throw error
     const isValidPass = await bcryptService.comparePassword(password , existingUser.password)// if yes then compare password
     if(!isValidPass) return next(new Error("Invalid credentials"));// if invalid pass then throw error
@@ -42,10 +42,10 @@ export const signUp = async (
   let { name, email, password } = req.body;
 
   try {
-    const existingUser = await users.getUser(email); // checkif user exists
+    const existingUser = await usersRepo.getUser(email); // checkif user exists
     if (existingUser) return next(new Error("Email already exists")); // if user already exists throw error
     password = await bcryptService.hashPassword(password) // if not then hash the password
-    const newUser = await users.createUser({ name, email, password }); // after hash create the user
+    const newUser = await usersRepo.createUser({ name, email, password }); // after hash create the user
     //sanitize the user before sending it to the client
     res.status(201).send({ success: true, user: {...newUser} }); //send response to client
   } catch (error: any) {

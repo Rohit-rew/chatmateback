@@ -6,7 +6,7 @@ const errorCatcher = (err:Error , req : Request,res : Response , next : NextFunc
 
 
 const  routeNotFoundError  = (req : Request,res : Response)=>{
-    res.status(200).json({route : "wrong Route"})
+    res.status(400).json({route : "wrong Route"})
 }
 
 module.exports = {errorCatcher , routeNotFoundError}

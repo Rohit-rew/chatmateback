@@ -13,4 +13,14 @@ model Users {
     name        String
     email       String @unique
     password    String
+    contacts    Contacts[]
 }   
+
+
+model Contacts {
+  id          String @id @default(cuid())
+  name        String
+  email       String
+  ownerId     String
+  owner       Users @relation(fields: [ownerId] , references: [id])
+}

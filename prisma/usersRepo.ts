@@ -7,7 +7,7 @@ interface CreateUserDto {
     password : string
 }
 
-export class Users {
+export class UsersRepo {
 
     async getUser (email : string) {
         const user = await prisma.users.findFirst({where : {email}})
