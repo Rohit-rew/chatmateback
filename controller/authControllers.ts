@@ -20,7 +20,7 @@ export const login = async (req: Request, res: Response , next : NextFunction) =
   try {
     const existingUser = await users.getUser(email) // check if user exists
     if(!existingUser) return next(new Error("Invalid credentials")); // if not throw error
-    const isValidPass = bcryptService.comparePassword(password , existingUser.password)// if yes then compare password
+    const isValidPass = await bcryptService.comparePassword(password , existingUser.password)// if yes then compare password
     if(!isValidPass) return next(new Error("Invalid credentials"));// if invalid pass then throw error
     const sanitedUserData = jwtService.userDataSanitizer(existingUser) // sanitize the data (remove password)
     const token = await jwtService.createToken(sanitedUserData) // if valid pass then generate token
@@ -45,8 +45,9 @@ export const signUp = async (
     const existingUser = await users.getUser(email); // checkif user exists
     if (existingUser) return next(new Error("Email already exists")); // if user already exists throw error
     password = await bcryptService.hashPassword(password) // if not then hash the password
-    const newUser = users.createUser({ name, email, password }); // after hash create the user
-    res.status(201).send({ success: true, user: newUser }); //send response to client
+    const newUser = await users.createUser({ name, email, password }); // after hash create the user
+    //sanitize the user before sending it to the client
+    res.status(201).send({ success: true, user: {...newUser} }); //send response to client
   } catch (error: any) {
     res.status(400).send({ success: false, msg: error.message });
   }

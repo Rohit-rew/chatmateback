@@ -1,6 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-
-import { check, validationResult } from "express-validator";
+import { check } from "express-validator";
 
 export const validateUserLogin = [
   check("email")
@@ -50,28 +48,5 @@ export const validateuserSignUp = [
     }),
 ];
 
-export const loginValidation = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const errors = validationResult(req).array();
 
-  if (errors.length > 0) {
-   return res.status(400).json({ success: false, errors });
-  }
-  return next();
-};
 
-export const userSignUpvalidation = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const errors = validationResult(req).array();
-
-  if (errors.length > 0) {
-    return res.status(400).json({ success: false, errors });
-  }
-  return next();
-};

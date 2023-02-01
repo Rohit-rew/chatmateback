@@ -10,13 +10,13 @@ import { login, signUp } from "../controller/authControllers";
 //validators
 import {
   validateUserLogin,
-  loginValidation,
-  userSignUpvalidation,
   validateuserSignUp,
 } from "../validators/authValidators";
 
-Router.post("/login", validateUserLogin, loginValidation, login);
+import { validationErrCatcher } from "../validators/validationErrorcatcher";
 
-Router.post("/signup", validateuserSignUp, userSignUpvalidation , signUp);
+Router.post("/login", validateUserLogin, validationErrCatcher, login);
+
+Router.post("/signup", validateuserSignUp, validationErrCatcher , signUp);
 
 module.exports = Router;

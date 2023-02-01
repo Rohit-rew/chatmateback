@@ -1,6 +1,10 @@
 const express  = require("express");
 const app = express();
 
+//cors
+const cors = require("cors")
+app.use(cors())
+
 //socker.io setup
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -18,6 +22,10 @@ require("dotenv").config();
 const authRoute = require("./routes/auth") // login and register
 app.use(authRoute)
 
+//contacts Route
+const contactsRoute = require("./routes/contacts")
+app.use(contactsRoute)
+
 
 //error handler
 const {errorCatcher , routeNotFoundError} = require("./errors/errorHandler")
@@ -31,6 +39,10 @@ io.use(jwtAuthMiddleware)
 // socket connection
 io.on("connection" , (socket)=>{
   console.log(socket.currentUser)
+
+  socket.on("chat" , (message)=>{
+    console.log(message)
+  })
 })
 
 

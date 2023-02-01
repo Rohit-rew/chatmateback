@@ -15,7 +15,7 @@ export class Users {
     }
 
     async createUser (userInfo : CreateUserDto) {
-        const data = await prisma.users.create({data : userInfo})
+        const data = prisma.users.create({data : userInfo})
         return data
     }
 
