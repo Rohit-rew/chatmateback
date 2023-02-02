@@ -19,4 +19,9 @@ export class UsersRepo {
         return data
     }
 
+    async getUserById (id : string){
+        const user = prisma.users.findFirst({where : {id}})
+        return user
+    }
+
 }

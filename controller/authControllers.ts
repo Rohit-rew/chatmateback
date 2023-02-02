@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 //prisma db
-import { UsersRepo } from "../prisma/usersDb";
+import { UsersRepo } from "../prisma/usersRepo";
 const usersRepo = new UsersRepo();
 
 // bcrypt service
